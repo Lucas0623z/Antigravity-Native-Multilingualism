@@ -1,16 +1,27 @@
 name: Release
 
-# 推送 v* 标签时：测试 → 打包 Windows / macOS 安装包 → 发布 GitHub Release
+# 发布规则：package.json 的版本号对应的 Release（v<版本>）还不存在时，
+#   推送到 main / 推送 v* 标签 / 在 Actions 页面手动运行，都会：
+#   测试 → 打包 Windows / macOS 安装包 → 创建标签并发布 GitHub Release。
+# 版本已发布过则直接跳过。
 on:
   push:
+    branches: [main]
     tags: ['v*']
+  workflow_dispatch:
 
 permissions:
   contents: write
 
+concurrency:
+  group: release
+  cancel-in-progress: false
+
 jobs:
   release:
     runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@v4
 
@@ -18,30 +29,41 @@ jobs:
         with:
           node-version: 22
 
-      - name: Check tag matches package.json version
+      - name: Resolve version
+        id: v
         run: |
-          v="v$(node -p "require('./package.json').version")"
-          if [ "$v" != "$GITHUB_REF_NAME" ]; then
-            echo "Tag $GITHUB_REF_NAME does not match package.json version $v"; exit 1
+          tag="v$(node -p "require('./package.json').version")"
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          if [ "$GITHUB_REF_TYPE" = "tag" ] && [ "$GITHUB_REF_NAME" != "$tag" ]; then
+            echo "Tag $GITHUB_REF_NAME does not match package.json version $tag"; exit 1
+          fi
+          if gh release view "$tag" -R "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo "Release $tag already exists, skipping."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
           fi
 
-      - run: npm ci
-      - run: npm test
-      - name: macOS script flow test
+      - if: steps.v.outputs.skip == 'false'
+        run: npm ci
+      - if: steps.v.outputs.skip == 'false'
+        run: npm test
+      - if: steps.v.outputs.skip == 'false'
+        name: macOS script flow test
         run: bash test/e2e/mac-test.sh
-      - name: Windows script flow test (PowerShell 7)
+      - if: steps.v.outputs.skip == 'false'
+        name: Windows script flow test (PowerShell 7)
         run: PWSH=pwsh bash test/e2e/ps-test.sh
 
-      - name: Build release packages
+      - if: steps.v.outputs.skip == 'false'
+        name: Build release packages
         run: node tools/release.js
 
-      - name: Publish release
-        env:
-          GH_TOKEN: ${{ github.token }}
+      - if: steps.v.outputs.skip == 'false'
+        name: Publish release
         run: |
-          notes=".github/release-notes/${GITHUB_REF_NAME}.md"
-          if [ -f "$notes" ]; then
-            gh release create "$GITHUB_REF_NAME" release/*.zip --title "$GITHUB_REF_NAME" --notes-file "$notes"
-          else
-            gh release create "$GITHUB_REF_NAME" release/*.zip --title "$GITHUB_REF_NAME" --generate-notes
-          fi
+          tag="${{ steps.v.outputs.tag }}"
+          notes=".github/release-notes/${tag}.md"
+          args=(release create "$tag" release/*.zip --title "$tag" --target "$GITHUB_SHA")
+          if [ -f "$notes" ]; then args+=(--notes-file "$notes"); else args+=(--generate-notes); fi
+          gh "${args[@]}"
