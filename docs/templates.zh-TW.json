@@ -1,0 +1,510 @@
+[
+ {
+  "en": "{n} agent[s] running",
+  "tr": "{n} 個智慧代理正在執行"
+ },
+ {
+  "en": "{n} file[s] changed",
+  "tr": "已更改 {n} 個檔案"
+ },
+ {
+  "en": "{n} file[s] modified",
+  "tr": "已修改 {n} 個檔案"
+ },
+ {
+  "en": "{n} file[s]",
+  "tr": "{n} 個檔案"
+ },
+ {
+  "en": "{n} tool[s] excluded",
+  "tr": "已排除 {n} 個工具"
+ },
+ {
+  "en": "{n} tool[s]",
+  "tr": "{n} 個工具"
+ },
+ {
+  "en": "{n} active conversation[s]",
+  "tr": "{n} 個活躍對話"
+ },
+ {
+  "en": "{n} conversation[s]",
+  "tr": "{n} 個對話"
+ },
+ {
+  "en": "{n} update[s]",
+  "tr": "{n} 項更新"
+ },
+ {
+  "en": "{n} project[s]",
+  "tr": "{n} 個專案"
+ },
+ {
+  "en": "{n} task[s]",
+  "tr": "{n} 個任務"
+ },
+ {
+  "en": "{n}/{n2} step[s]",
+  "tr": "{n}/{n2} 步"
+ },
+ {
+  "en": "{n} step[s]",
+  "tr": "{n} 個步驟"
+ },
+ {
+  "en": "Step {n} of {n2}",
+  "tr": "第 {n} 步，共 {n2} 步"
+ },
+ {
+  "en": "{n} result[s]",
+  "tr": "{n} 個結果"
+ },
+ {
+  "en": "{n} selected",
+  "tr": "已選擇 {n} 項"
+ },
+ {
+  "en": "{n} active",
+  "tr": "{n} 個活躍"
+ },
+ {
+  "en": "{n} comment[s]",
+  "tr": "{n} 則留言"
+ },
+ {
+  "en": "{n} message[s]",
+  "tr": "{n} 則訊息"
+ },
+ {
+  "en": "{n} subagent[s]",
+  "tr": "{n} 個子代理"
+ },
+ {
+  "en": "{n} agent[s]",
+  "tr": "{n} 個智慧代理"
+ },
+ {
+  "en": "{n} skill[s]",
+  "tr": "{n} 個技能"
+ },
+ {
+  "en": "{n} rule[s]",
+  "tr": "{n} 條規則"
+ },
+ {
+  "en": "{n} plugin[s]",
+  "tr": "{n} 個外掛"
+ },
+ {
+  "en": "{n} workspace[s]",
+  "tr": "{n} 個工作區"
+ },
+ {
+  "en": "{n} attachment[s]",
+  "tr": "{n} 個附件"
+ },
+ {
+  "en": "{n} line[s]",
+  "tr": "{n} 行"
+ },
+ {
+  "en": "+{n} more",
+  "tr": "另外 {n} 個"
+ },
+ {
+  "en": "{n} more",
+  "tr": "還有 {n} 個"
+ },
+ {
+  "en": "See all ({n})",
+  "tr": "檢視全部 ({n})"
+ },
+ {
+  "en": "See {n} more",
+  "tr": "檢視另外 {n} 個"
+ },
+ {
+  "en": "Show {n} more subagent[s]",
+  "tr": "顯示另外 {n} 個子代理"
+ },
+ {
+  "en": "Show {n} more",
+  "tr": "再顯示 {n} 個"
+ },
+ {
+  "en": "Show {n} breakdown[s]",
+  "tr": "顯示 {n} 項明細"
+ },
+ {
+  "en": "Hide {n} breakdown[s]",
+  "tr": "隱藏 {n} 項明細"
+ },
+ {
+  "en": "{n}% left",
+  "tr": "剩餘 {n}%"
+ },
+ {
+  "en": "{n}% used",
+  "tr": "已用 {n}%"
+ },
+ {
+  "en": "{n} of {n2} task[s] done",
+  "tr": "已完成 {n}/{n2} 個任務"
+ },
+ {
+  "en": "{n} of {n2} done",
+  "tr": "已完成 {n}/{n2}"
+ },
+ {
+  "en": "Turn {n} of {n2}",
+  "tr": "第 {n} 輪，共 {n2} 輪"
+ },
+ {
+  "en": "Load older messages, showing {n} of {n2}",
+  "tr": "載入更早的訊息（目前顯示 {n}/{n2}）"
+ },
+ {
+  "en": "No more older messages, showing {n} of {n2}",
+  "tr": "沒有更早的訊息了（目前顯示 {n}/{n2}）"
+ },
+ {
+  "en": "{d} ago",
+  "tr": "{d}前"
+ },
+ {
+  "en": "{l} ago",
+  "tr": "{l}前"
+ },
+ {
+  "en": "Updated {d} ago",
+  "tr": "{d}前更新"
+ },
+ {
+  "en": "Updated {l} ago",
+  "tr": "{l}前更新"
+ },
+ {
+  "en": "Updated {t}",
+  "tr": "更新於 {t}"
+ },
+ {
+  "en": "Resets in {d}",
+  "tr": "{d}後重置"
+ },
+ {
+  "en": "Resets in {l}",
+  "tr": "{l}後重置"
+ },
+ {
+  "en": "Weekly limit, resets in {d}",
+  "tr": "每週限額，{d}後重置"
+ },
+ {
+  "en": "Daily limit, resets in {d}",
+  "tr": "每日限額，{d}後重置"
+ },
+ {
+  "en": "Monthly limit, resets in {d}",
+  "tr": "每月限額，{d}後重置"
+ },
+ {
+  "en": "{d} limit, resets in {d2}",
+  "tr": "{d}限額，{d2}後重置"
+ },
+ {
+  "en": "You have used some of your weekly limit, it will fully refresh in {l}.",
+  "tr": "您已使用部分每週限額，將在 {l}後完全恢復。"
+ },
+ {
+  "en": "You have used some of your daily limit, it will fully refresh in {l}.",
+  "tr": "您已使用部分每日限額，將在 {l}後完全恢復。"
+ },
+ {
+  "en": "You have used some of your {n}-hour limit, it will fully refresh in {l}.",
+  "tr": "您已使用部分 {n} 小時限額，將在 {l}後完全恢復。"
+ },
+ {
+  "en": "You have reached your weekly limit, it will refresh in {l}.",
+  "tr": "您已達到每週限額，將在 {l}後恢復。"
+ },
+ {
+  "en": "You have reached your weekly limit, it will fully refresh in {l}.",
+  "tr": "您已達到每週限額，將在 {l}後完全恢復。"
+ },
+ {
+  "en": "You have reached your {n}-hour limit, it will refresh in {l}.",
+  "tr": "您已達到 {n} 小時限額，將在 {l}後恢復。"
+ },
+ {
+  "en": "You have reached your {n}-hour limit, it will fully refresh in {l}.",
+  "tr": "您已達到 {n} 小時限額，將在 {l}後完全恢復。"
+ },
+ {
+  "en": "{x} Weekly Limit",
+  "tr": "{x} 每週限額"
+ },
+ {
+  "en": "{x} Five Hour Limit",
+  "tr": "{x} 5 小時限額"
+ },
+ {
+  "en": "{x} Limit Remaining",
+  "tr": "{x} 剩餘限額"
+ },
+ {
+  "en": "Available AI Credits: {x}",
+  "tr": "可用 AI 額度：{x}"
+ },
+ {
+  "en": "Your Plan: {x}",
+  "tr": "您的套餐：{x}"
+ },
+ {
+  "en": "Worked for {d} · {n} update[s]",
+  "tr": "工作了 {d} · {n} 項更新"
+ },
+ {
+  "en": "Worked for {d}",
+  "tr": "工作了 {d}"
+ },
+ {
+  "en": "Thought for {d}",
+  "tr": "思考了 {d}"
+ },
+ {
+  "en": "Thinking for {d}",
+  "tr": "已思考 {d}"
+ },
+ {
+  "en": "Running for {d}",
+  "tr": "已執行 {d}"
+ },
+ {
+  "en": "Still thinking, {n} second[s]",
+  "tr": "仍在思考，{n} 秒"
+ },
+ {
+  "en": "Exited with code {n}",
+  "tr": "結束代碼 {n}"
+ },
+ {
+  "en": "Exited with code -{n}",
+  "tr": "結束代碼 -{n}"
+ },
+ {
+  "en": "{x} · Exited with code {n}",
+  "tr": "{x} · 結束代碼 {n}"
+ },
+ {
+  "en": "Rules: {n} token[s]",
+  "tr": "規則：{n} Token"
+ },
+ {
+  "en": "Skills: {n} token[s]",
+  "tr": "技能：{n} Token"
+ },
+ {
+  "en": "MCP Tools: {n} token[s]",
+  "tr": "MCP 工具：{n} Token"
+ },
+ {
+  "en": "Mcp Tools: {n} token[s]",
+  "tr": "MCP 工具：{n} Token"
+ },
+ {
+  "en": "System: {n} token[s]",
+  "tr": "系統：{n} Token"
+ },
+ {
+  "en": "Conversation: {n} token[s]",
+  "tr": "對話：{n} Token"
+ },
+ {
+  "en": "Context: {n} token[s]",
+  "tr": "上下文：{n} Token"
+ },
+ {
+  "en": "Tools: {n} token[s]",
+  "tr": "工具：{n} Token"
+ },
+ {
+  "en": "Memory: {n} token[s]",
+  "tr": "記憶：{n} Token"
+ },
+ {
+  "en": "Files: {n} token[s]",
+  "tr": "檔案：{n} Token"
+ },
+ {
+  "en": "{n} token[s]",
+  "tr": "{n} Token"
+ },
+ {
+  "en": "Select model, current: {x}",
+  "tr": "選擇模型，目前：{x}"
+ },
+ {
+  "en": "Select project, current: {x}",
+  "tr": "選擇專案，目前：{x}"
+ },
+ {
+  "en": "Agent permissions preset selector, current: {x}",
+  "tr": "智慧代理權限預設選擇器，目前：{x}"
+ },
+ {
+  "en": "Agent permissions preset: {x}, Permissions cannot be changed while the agent is running",
+  "tr": "智慧代理權限預設：{x}，智慧代理執行時無法更改權限"
+ },
+ {
+  "en": "Model: {x}, Model cannot be changed while the agent is running",
+  "tr": "模型：{x}，智慧代理執行時無法更改模型"
+ },
+ {
+  "en": "Add shortcut for {x}",
+  "tr": "為「{x}」新增快速鍵"
+ },
+ {
+  "en": "Remove shortcut {x} for {x2}",
+  "tr": "移除「{x2}」的快速鍵 {x}"
+ },
+ {
+  "en": "Shortcut {x} for {x2}",
+  "tr": "「{x2}」的快速鍵 {x}"
+ },
+ {
+  "en": "Details for {x}",
+  "tr": "{x} 的詳情"
+ },
+ {
+  "en": "More actions for {x}",
+  "tr": "{x} 的更多操作"
+ },
+ {
+  "en": "See more in {x}",
+  "tr": "在 {x} 中檢視更多"
+ },
+ {
+  "en": "Plugins in {x}",
+  "tr": "{x} 中的外掛"
+ },
+ {
+  "en": "Install {x}",
+  "tr": "安裝 {x}"
+ },
+ {
+  "en": "Close {x}",
+  "tr": "關閉 {x}"
+ },
+ {
+  "en": "Fix with Agent: {x}",
+  "tr": "讓智慧代理修復：{x}"
+ },
+ {
+  "en": "Filter skills and rules: {x}",
+  "tr": "篩選技能和規則：{x}"
+ },
+ {
+  "en": "Open Subagent: {x}",
+  "tr": "開啟子代理：{x}"
+ },
+ {
+  "en": "Start Best-of-{n}",
+  "tr": "開始 Best-of-{n}"
+ },
+ {
+  "en": "Version {w}",
+  "tr": "版本 {w}"
+ },
+ {
+  "en": "Send feedback as {w}",
+  "tr": "以 {w} 身份傳送意見回饋"
+ },
+ {
+  "en": "Waiting on @{w}",
+  "tr": "正在等待 @{w}"
+ },
+ {
+  "en": "Working for @{w}",
+  "tr": "正在為 @{w} 工作"
+ },
+ {
+  "en": "{n} comment[s] in “{x}”",
+  "tr": "「{x}」中有 {n} 則留言"
+ },
+ {
+  "en": "Started from “{x}”",
+  "tr": "從「{x}」啟動"
+ },
+ {
+  "en": "Started during “{x}”",
+  "tr": "在「{x}」期間啟動"
+ },
+ {
+  "en": "Running {x}",
+  "tr": "正在執行 {x}"
+ },
+ {
+  "en": "Searching {x}",
+  "tr": "正在搜尋 {x}"
+ },
+ {
+  "en": "Editing {x}",
+  "tr": "正在編輯 {x}"
+ },
+ {
+  "en": "Reading {x}",
+  "tr": "正在讀取 {x}"
+ },
+ {
+  "en": "Ran {x}",
+  "tr": "已執行 {x}"
+ },
+ {
+  "en": "Edited {w}",
+  "tr": "已編輯 {w}"
+ },
+ {
+  "en": "Read {w}",
+  "tr": "已讀取 {w}"
+ },
+ {
+  "en": "Created {w}",
+  "tr": "已建立 {w}"
+ },
+ {
+  "en": "Viewed {w}",
+  "tr": "已檢視 {w}"
+ },
+ {
+  "en": "Analyzed {w}",
+  "tr": "已分析 {w}"
+ },
+ {
+  "en": "Hi {x}, what can we get done today?",
+  "tr": "{x}，您好！今天想完成什麼？"
+ },
+ {
+  "en": "Hey {x}, what should we build today?",
+  "tr": "{x}，您好！今天想建構什麼？"
+ },
+ {
+  "en": "Welcome back, {x}. Where should we pick up?",
+  "tr": "歡迎回來，{x}。我們從哪裡繼續？"
+ },
+ {
+  "en": "Good to see you, {x}. What's next?",
+  "tr": "很高興見到您，{x}。接下來做什麼？"
+ },
+ {
+  "en": "Hey there, what should we build today?",
+  "tr": "您好！今天想建構什麼？"
+ },
+ {
+  "en": "Welcome back. Where should we pick up?",
+  "tr": "歡迎回來。我們從哪裡繼續？"
+ },
+ {
+  "en": "Good to see you. What's next?",
+  "tr": "很高興見到您。接下來做什麼？"
+ }
+]

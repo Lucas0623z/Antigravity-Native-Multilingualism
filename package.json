@@ -1,0 +1,23 @@
+{
+  "name": "agy-i18n",
+  "version": "1.0.1",
+  "description": "Antigravity 桌面端原生语言包：在 设置 → 外观 中用原生下拉框切换界面语言",
+  "private": true,
+  "license": "MIT",
+  "main": "cli.js",
+  "bin": {
+    "agy-i18n": "cli.js"
+  },
+  "scripts": {
+    "build": "node tools/build.js",
+    "test": "node tools/build.js && node --test test/*.test.js",
+    "release": "node tools/release.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "devDependencies": {
+    "@electron/asar": "^3.2.17",
+    "jsdom": "^24.1.3"
+  }
+}
