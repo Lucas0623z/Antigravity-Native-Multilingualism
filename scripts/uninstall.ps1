@@ -36,7 +36,7 @@ try {
     else { Write-Ok '已从备份还原原版 app.asar（SHA-256 校验一致）。' }
 
     if (-not $KeepFiles -and (Test-Path -LiteralPath $script:AgyDataDir)) {
-        Set-Location -LiteralPath $env:TEMP
+        Set-Location -LiteralPath ([System.IO.Path]::GetTempPath())
         Remove-Item -LiteralPath $script:AgyDataDir -Recurse -Force -ErrorAction SilentlyContinue
         Write-Ok "已删除 $($script:AgyDataDir)"
     }
