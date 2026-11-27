@@ -56,7 +56,7 @@ function zip(entries) {
     locals.push(lh, name, comp);
     const ch = Buffer.alloc(46);
     ch.writeUInt32LE(0x02014b50, 0);
-    ch.writeUInt16LE(20, 4);
+    ch.writeUInt16LE(e.mode ? 0x0314 : 20, 4); // 高字节 3 = Unix：让 macOS 解压后保留可执行权限
     ch.writeUInt16LE(20, 6);
     ch.writeUInt16LE(0x0800, 8);
     ch.writeUInt16LE(8, 10);
@@ -66,6 +66,7 @@ function zip(entries) {
     ch.writeUInt32LE(comp.length, 20);
     ch.writeUInt32LE(data.length, 24);
     ch.writeUInt16LE(name.length, 28);
+    if (e.mode) ch.writeUInt32LE(((0o100000 | e.mode) << 16) >>> 0, 38);
     ch.writeUInt32LE(offset, 42);
     centrals.push(ch, name);
     offset += 30 + name.length + comp.length;
@@ -80,28 +81,41 @@ function zip(entries) {
   return Buffer.concat([...locals, cd, end]);
 }
 
-function collect(rel, out, prefix) {
+function collect(rel, out, prefix, skip) {
   const full = path.join(ROOT, rel);
+  const posix = rel.split(path.sep).join('/');
+  if (skip && skip(posix)) return;
   if (fs.statSync(full).isDirectory()) {
-    for (const n of fs.readdirSync(full).sort()) collect(path.join(rel, n), out, prefix);
+    for (const n of fs.readdirSync(full).sort()) collect(path.join(rel, n), out, prefix, skip);
   } else {
-    out.push({ name: `${prefix}/${rel.split(path.sep).join('/')}`, data: fs.readFileSync(full) });
+    const exec = /\.(sh|command)$/.test(posix);
+    out.push({ name: `${prefix}/${posix}`, data: fs.readFileSync(full), mode: exec ? 0o755 : 0o644 });
   }
 }
+
+const COMMON = ['cli.js', 'package.json', 'README.md', 'LICENSE', 'src', path.join('dist', 'payload'), 'locales'];
+const TARGETS = {
+  windows: { files: ['安装.cmd', '卸载.cmd', ...COMMON, 'scripts'], skip: (p) => p.startsWith('scripts/macos') },
+  macos: { files: ['安装.command', '卸载.command', ...COMMON, 'scripts'], skip: (p) => /^scripts\/[^/]+\.ps1$/.test(p) },
+};
 
 function release() {
   build();
   const prefix = `agy-i18n-${PKG.version}`;
-  const entries = [];
-  for (const rel of ['安装.cmd', '卸载.cmd', 'cli.js', 'package.json', 'README.md', 'LICENSE', 'src', path.join('dist', 'payload'), 'locales', 'scripts']) {
-    collect(rel, entries, prefix);
-  }
   const outDir = path.join(ROOT, 'release');
   fs.mkdirSync(outDir, { recursive: true });
-  const file = path.join(outDir, `${prefix}-windows.zip`);
-  fs.writeFileSync(file, zip(entries));
-  return { file, files: entries.length, bytes: fs.statSync(file).size };
+  const out = [];
+  for (const [name, t] of Object.entries(TARGETS)) {
+    const entries = [];
+    for (const rel of t.files) collect(rel, entries, prefix, t.skip);
+    // Windows 包不需要 Unix 权限位
+    if (name === 'windows') entries.forEach((e) => delete e.mode);
+    const file = path.join(outDir, `${prefix}-${name}.zip`);
+    fs.writeFileSync(file, zip(entries));
+    out.push({ file, files: entries.length, bytes: fs.statSync(file).size });
+  }
+  return out;
 }
 
-if (require.main === module) process.stdout.write(`${JSON.stringify(release())}\n`);
+if (require.main === module) process.stdout.write(`${JSON.stringify(release(), null, 1)}\n`);
 module.exports = { release, zip, crc32 };

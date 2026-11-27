@@ -1,6 +1,6 @@
 {
   "name": "agy-i18n",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Antigravity 桌面端原生语言包：在 设置 → 外观 中用原生下拉框切换界面语言",
   "private": true,
   "license": "MIT",

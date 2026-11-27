@@ -70,10 +70,59 @@ function findBaseUpdater(exp) {
   return null;
 }
 
+/**
+ * macOS：electron-updater 的 MacUpdater 走 Squirrel.Mac，下载完成后在应用退出时由 ShipIt 替换整个 .app。
+ * 记录"已下载更新"，在 will-quit 时启动一次性衔接脚本（bash，完成即退出）。
+ */
+function installMacUpdaterHook(opts) {
+  const { install, log, electron, spawn = childProcess.spawn } = opts;
+  if (!electron || !electron.app) return null;
+  const script = path.join(install.dataDir, 'scripts', 'macos', 'repatch-after-update.sh');
+  const asarPath = path.join(install.appDir, 'Contents', 'Resources', 'app.asar');
+  let pending = false;
+  let spawned = false;
+  const ctx = {
+    markDownloaded() {
+      pending = true;
+    },
+    spawnBridge() {
+      if (spawned) return true;
+      try {
+        if (!fs.existsSync(script)) {
+          log('mac repatch script missing, skip bridge');
+          return false;
+        }
+        const args = [script, '--app', install.appDir, '--data-dir', install.dataDir, '--old-hash', sha256(asarPath) || 'unknown', '--parent-pid', String(process.pid)];
+        const child = spawn('/bin/bash', args, { detached: true, stdio: 'ignore' });
+        if (child && child.on) child.on('error', (e) => log('mac bridge spawn error', e));
+        if (child && child.unref) child.unref();
+        spawned = true;
+        log('mac update bridge started');
+        return true;
+      } catch (e) {
+        log('mac bridge spawn failed', e);
+        return false;
+      }
+    },
+  };
+  try {
+    // 原生 Squirrel.Mac 事件：electron-updater 的 MacUpdater 也依赖它
+    const au = electron.autoUpdater;
+    if (au && typeof au.on === 'function') au.on('update-downloaded', () => ctx.markDownloaded());
+  } catch (e) {
+    log('mac autoUpdater listen failed', e);
+  }
+  electron.app.on('will-quit', () => {
+    if (pending) ctx.spawnBridge();
+  });
+  return ctx;
+}
+
 function installUpdaterHook(opts) {
   const { install, log, platform = process.platform, spawn = childProcess.spawn } = opts;
-  if (platform !== 'win32') return null;
   if (!install || !install.dataDir || !install.appDir) return null;
+  if (platform === 'darwin') return installMacUpdaterHook(opts);
+  if (platform !== 'win32') return null;
 
   const script = path.join(install.dataDir, 'scripts', 'repatch-after-update.ps1');
   const asarPath = path.join(install.appDir, 'resources', 'app.asar');
@@ -132,4 +181,4 @@ function installUpdaterHook(opts) {
   return ctx;
 }
 
-module.exports = { installUpdaterHook, hookBaseUpdater, findBaseUpdater };
+module.exports = { installUpdaterHook, installMacUpdaterHook, hookBaseUpdater, findBaseUpdater };

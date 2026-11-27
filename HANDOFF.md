@@ -11,10 +11,11 @@
 
 | 测试 | 结果 |
 |---|---|
-| `npm test`（单元测试） | 44/44 |
+| `npm test`（单元测试） | 46/46 |
 | `test/e2e/run.js`（真实 Electron 44.11.6 / 36.9.5） | 26/26 |
 | `test/e2e/run.js`（Electron 28.3.3，旧版 setPreloads 路径） | 23/23（WebContentsView 场景跳过） |
 | `test/e2e/ps-test.sh`（PowerShell 7 安装/更新/卸载流程） | 11/11 |
+| `test/e2e/mac-test.sh`（macOS 安装/更新/卸载流程，模拟 .app） | 13/13 |
 
 ## 在真机上需要验证的事（按优先级）
 
@@ -25,6 +26,12 @@
 5. **启动后检查**：界面是否变成中文；设置 → 外观是否出现"显示语言"；切换 English / 繁體中文 是否即时生效；菜单栏、托盘菜单是否翻译；`%LOCALAPPDATA%\agy-i18n\logs\runtime.log` 有无报错。
 6. **卸载**：`%LOCALAPPDATA%\agy-i18n\卸载.cmd`，确认 `app.asar` 与安装前 SHA-256 一致（`Get-FileHash`）。
 7. **出问题时的安全阀**：以环境变量 `AGY_I18N=off` 启动 Antigravity 可完全跳过本扩展。
+
+## macOS 版（v1.1.0 新增，未在真 Mac 上运行过）
+
+- 脚本：`scripts/macos/*.sh`、`安装.command`、`卸载.command`；数据目录 `~/Library/Application Support/agy-i18n`。
+- 不重新签名；Fuse 从 `Contents/Frameworks/Electron Framework.framework/Electron Framework` 读取。
+- 需验证：首次写入 `Antigravity.app` 时 macOS 的"App 管理"权限提示；补丁后应用能否正常启动、钥匙串登录是否仍有效；Squirrel 自动更新后衔接脚本是否重新打补丁（`logs/update.log`）。
 
 ## 调试技巧
 

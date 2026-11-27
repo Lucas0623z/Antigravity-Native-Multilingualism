@@ -223,7 +223,7 @@ function start(opts) {
   // ---------- 注册 ----------
   const menus = installMenuHooks(electron, getTranslate, log);
   installDialogHooks(electron, getTranslate, log);
-  installUpdaterHook({ install, log });
+  installUpdaterHook({ install, log, electron });
 
   const registered = new WeakSet();
   function addPreload(ses) {

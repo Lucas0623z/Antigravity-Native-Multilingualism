@@ -118,3 +118,46 @@ test('对话框钩子：翻译文字，按钮顺序与返回值不变，两种�
   dialog.showMessageBoxSync({ title: 'Settings' });
   assert.strictEqual(seen[3].title, 'Settings');
 });
+
+test('macOS 更新钩子：下载完成后，退出时启动一次性 bash 衔接脚本', () => {
+  const { EventEmitter } = require('events');
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'agy-mac-'));
+  fs.mkdirSync(path.join(dir, 'scripts', 'macos'), { recursive: true });
+  fs.writeFileSync(path.join(dir, 'scripts', 'macos', 'repatch-after-update.sh'), '');
+  const appDir = path.join(dir, 'Antigravity.app');
+  fs.mkdirSync(path.join(appDir, 'Contents', 'Resources'), { recursive: true });
+  fs.writeFileSync(path.join(appDir, 'Contents', 'Resources', 'app.asar'), 'x');
+  const app = new EventEmitter();
+  const autoUpdater = new EventEmitter();
+  const spawns = [];
+  installUpdaterHook({
+    install: { dataDir: dir, appDir },
+    log() {},
+    platform: 'darwin',
+    electron: { app, autoUpdater },
+    spawn: (cmd, args, opts) => (spawns.push({ cmd, args, opts }), { on() {}, unref() {} }),
+  });
+  app.emit('will-quit');
+  assert.strictEqual(spawns.length, 0, '没有下载更新时退出不启动任何东西');
+  autoUpdater.emit('update-downloaded');
+  app.emit('will-quit');
+  app.emit('will-quit');
+  assert.strictEqual(spawns.length, 1, '只启动一次');
+  assert.strictEqual(spawns[0].cmd, '/bin/bash');
+  assert.ok(spawns[0].opts.detached);
+  const a = spawns[0].args;
+  assert.ok(a[0].endsWith(path.join('scripts', 'macos', 'repatch-after-update.sh')));
+  assert.strictEqual(a[a.indexOf('--app') + 1], appDir);
+  assert.match(a[a.indexOf('--old-hash') + 1], /^[0-9a-f]{64}$/);
+});
+
+test('平台布局：Windows 与 macOS 的 app.asar / Fuse 位置', () => {
+  const { layout } = require('../src/patcher/platform.js');
+  const m = layout('/Applications/Antigravity.app', 'darwin');
+  assert.strictEqual(m.asarPath, path.join('/Applications/Antigravity.app', 'Contents', 'Resources', 'app.asar'));
+  assert.ok(m.fuseBinary.endsWith(path.join('Electron Framework.framework', 'Electron Framework')));
+  assert.strictEqual(layout('/x/Antigravity.app', 'linux').platform, 'darwin', '.app 结尾按 macOS 处理');
+  const w = layout('/c/antigravity', 'win32');
+  assert.strictEqual(w.asarPath, path.join('/c/antigravity', 'resources', 'app.asar'));
+  assert.strictEqual(w.fuseBinary, w.exe);
+});

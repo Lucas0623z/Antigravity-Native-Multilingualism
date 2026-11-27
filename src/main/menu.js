@@ -165,8 +165,24 @@ function installMenuHooks(electron, getTranslate, log) {
     };
   }
 
+  // macOS Dock 右键菜单
+  const dock = electron.app && electron.app.dock;
+  let dockMenuOriginal = null;
+  const origDockSet = dock && typeof dock.setMenu === 'function' ? dock.setMenu.bind(dock) : null;
+  if (origDockSet) {
+    dock.setMenu = function setMenu(menu) {
+      dockMenuOriginal = menu;
+      return origDockSet(translateMenu(menu));
+    };
+  }
+
   function refresh() {
     refreshQueued = false;
+    try {
+      if (origDockSet && dockMenuOriginal) origDockSet(translateMenu(dockMenuOriginal));
+    } catch (e) {
+      log('dock menu refresh failed', e);
+    }
     try {
       if (appMenuOriginal !== undefined) {
         lastShadowApp = translateMenu(appMenuOriginal);

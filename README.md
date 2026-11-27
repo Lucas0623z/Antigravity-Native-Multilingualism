@@ -1,15 +1,16 @@
 # Antigravity 原生语言包（agy-i18n）
 
-为 **Google Antigravity 桌面端（Windows）** 提供界面语言切换：在 **设置 → 外观 → 显示语言** 里，用 Antigravity 自己的下拉框选择语言，**立即生效、无需重启**。
+为 **Google Antigravity 桌面端（Windows / macOS）** 提供界面语言切换：在 **设置 → 外观 → 显示语言** 里，用 Antigravity 自己的下拉框选择语言，**立即生效、无需重启**。
 
 - 支持语言：English / 简体中文 / 繁體中文 / 跟随系统
 - 词典：4,100+ 条精确词条 + 120+ 条动态文案模板（数量、时长、限额、步骤……）
 - 覆盖：主界面、设置页、原生菜单栏、托盘菜单、右键菜单、系统对话框
 - 社区非官方项目，与 Google 无关
 
-## 安装
+## 安装（Windows）
 
-1. 下载并解压 `agy-i18n-<版本>-windows.zip`
+1. 下载 `agy-i18n-<版本>-windows.zip`。若开启了"智能应用控制"，先右键 zip → 属性 → 勾选"解除锁定"再解压
+
 2. **完全退出 Antigravity**（包括右下角托盘图标）
 3. 双击 `安装.cmd`
 4. 启动 Antigravity → 设置 → 外观 → **显示语言**
@@ -24,9 +25,19 @@
 | `-AppDir "D:\Apps\Antigravity"` | Antigravity 不在默认位置时指定安装目录 |
 | `-NonInteractive` | 不询问（Antigravity 在运行时直接退出，返回码 3） |
 
+## 安装（macOS）
+
+1. 下载并解压 `agy-i18n-<版本>-macos.zip`
+2. **退出 Antigravity**（⌘Q）
+3. 双击 `安装.command`（首次若被阻止：右键 → 打开；或在终端运行 `bash 安装.command`）
+4. 若提示"终端被阻止修改 App"：打开 **系统设置 → 隐私与安全性 → App 管理**，允许"终端"，再运行一次
+5. 打开 Antigravity → 设置 → 外观 → **显示语言**
+
+macOS 版**不重新签名**（Google 的签名保持原样）、不注册 LaunchAgent、不常驻后台。卸载时逐字节还原，应用签名随之完全恢复有效。数据目录：`~/Library/Application Support/agy-i18n`。
+
 ## 卸载
 
-双击 `%LOCALAPPDATA%\agy-i18n\卸载.cmd`。原版 `app.asar` 会被**逐字节重建并用 SHA-256 校验**，然后删除 `%LOCALAPPDATA%\agy-i18n`。
+Windows：双击 `%LOCALAPPDATA%\agy-i18n\卸载.cmd`；macOS：双击 `~/Library/Application Support/agy-i18n/卸载.command`。原版 `app.asar` 会被**逐字节重建并用 SHA-256 校验**，然后删除 `%LOCALAPPDATA%\agy-i18n`。
 
 ## 与现有方案的对比
 
@@ -64,7 +75,7 @@ app.asar（只追加，不移动任何原始字节）
 - **不误翻**：代码块、编辑器、终端、输入框、聊天正文（Markdown）、用户消息、对话标题、模型名整块跳过；`<p>/<li>` 等正文语境中禁用自由文本模板。
 - **原生下拉框**：克隆设置页里 "Theme" 行（或任意原生下拉行），因此字体、间距、颜色、圆角、图标、深浅色主题都与原生一致；弹出列表会"学习"你打开过的原生下拉弹层样式并复用。
 - **原生菜单**：不改 Antigravity 的 MenuItem（它的代码按英文 label 查找菜单、路由更新操作），而是提交给系统显示时生成翻译后的影子菜单，点击转发回原菜单项。
-- **自动更新**：在 electron-updater 安装更新的那一刻启动一次性 PowerShell 脚本：等安装器换完文件 → 重新打补丁 → 重启 Antigravity。脚本完成即退出。任何一步失败都不影响官方更新本身。
+- **自动更新**：Windows 在 electron-updater 安装更新的那一刻启动一次性 PowerShell 脚本：等安装器换完文件 → 重新打补丁 → 重启 Antigravity。macOS 在"已下载更新"且应用退出时启动一次性 bash 脚本：等 Squirrel/ShipIt 换上新版 → 重新打补丁（若已被自动重新打开，只发系统通知提示重新打开）。脚本完成即退出，任何一步失败都不影响官方更新本身。
 - **安全检查**：打补丁前读取 Electron Fuses；若开启了 ASAR 完整性校验则拒绝修改（否则 Antigravity 会无法启动）。
 
 ## 安全阀
@@ -83,12 +94,13 @@ Antigravity 更新频繁，新文案会显示为英文。开启收集：编辑 A
 npm install
 npm test                                  # 单元测试（词典、补丁器、DOM 翻译、设置页下拉框、钩子）
 ELECTRON_BIN=/path/to/electron node test/e2e/run.js   # 真实 Electron 端到端测试（需 xvfb）
-PWSH=/path/to/pwsh bash test/e2e/ps-test.sh           # 安装/更新/卸载脚本全流程测试
-npm run release                           # 生成 release/agy-i18n-<版本>-windows.zip
+PWSH=/path/to/pwsh bash test/e2e/ps-test.sh           # Windows 安装/更新/卸载脚本全流程测试
+bash test/e2e/mac-test.sh                             # macOS 安装/更新/卸载脚本全流程测试（模拟 .app）
+npm run release                           # 生成 release/agy-i18n-<版本>-windows.zip 与 -macos.zip
 ```
 
 ## 已知限制
 
-- 目前仅支持 **Windows**（macOS 需处理代码签名，计划中）。已在 Electron 28 / 36 / 44 上做端到端测试；真实 Antigravity 2.35.2 使用 Electron 44.9.1。
+- macOS 版尚未在真实 Mac 上运行过（脚本已在模拟 .app 结构上完整测试）。已在 Electron 28 / 36 / 44 上做端到端测试；真实 Antigravity 2.35.2 使用 Electron 44.9.1。
 - 只适用于 **Antigravity 桌面端**（`resources\app.asar`）；Antigravity IDE（VS Code 分支）请使用 IDE 的语言包扩展。
 - 新版本新增的文案在词典更新前显示英文。
