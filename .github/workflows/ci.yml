@@ -1,0 +1,21 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm ci
+      - run: npm test
+      - name: macOS script flow test
+        run: bash test/e2e/mac-test.sh
+      - name: Windows script flow test (PowerShell 7)
+        run: PWSH=pwsh bash test/e2e/ps-test.sh

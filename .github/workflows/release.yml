@@ -1,0 +1,47 @@
+name: Release
+
+# 推送 v* 标签时：测试 → 打包 Windows / macOS 安装包 → 发布 GitHub Release
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Check tag matches package.json version
+        run: |
+          v="v$(node -p "require('./package.json').version")"
+          if [ "$v" != "$GITHUB_REF_NAME" ]; then
+            echo "Tag $GITHUB_REF_NAME does not match package.json version $v"; exit 1
+          fi
+
+      - run: npm ci
+      - run: npm test
+      - name: macOS script flow test
+        run: bash test/e2e/mac-test.sh
+      - name: Windows script flow test (PowerShell 7)
+        run: PWSH=pwsh bash test/e2e/ps-test.sh
+
+      - name: Build release packages
+        run: node tools/release.js
+
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          notes=".github/release-notes/${GITHUB_REF_NAME}.md"
+          if [ -f "$notes" ]; then
+            gh release create "$GITHUB_REF_NAME" release/*.zip --title "$GITHUB_REF_NAME" --notes-file "$notes"
+          else
+            gh release create "$GITHUB_REF_NAME" release/*.zip --title "$GITHUB_REF_NAME" --generate-notes
+          fi

@@ -1,9 +1,32 @@
 {
-  "name": "agy-i18n",
+  "name": "antigravity-native-multilingualism",
   "version": "1.1.0",
-  "description": "Antigravity 桌面端原生语言包：在 设置 → 外观 中用原生下拉框切换界面语言",
-  "private": true,
+  "description": "Antigravity 桌面端原生语言包：在 设置 → 外观 中用原生下拉框切换界面语言（English / 简体中文 / 繁體中文），支持 Windows 与 macOS",
+  "keywords": [
+    "antigravity",
+    "google-antigravity",
+    "i18n",
+    "l10n",
+    "localization",
+    "language-pack",
+    "chinese",
+    "zh-CN",
+    "zh-TW",
+    "electron",
+    "windows",
+    "macos"
+  ],
+  "homepage": "https://github.com/Lucas0623z/Antigravity-Native-Multilingualism#readme",
+  "bugs": {
+    "url": "https://github.com/Lucas0623z/Antigravity-Native-Multilingualism/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Lucas0623z/Antigravity-Native-Multilingualism.git"
+  },
   "license": "MIT",
+  "author": "Lucas0623z (https://github.com/Lucas0623z)",
+  "private": true,
   "main": "cli.js",
   "bin": {
     "agy-i18n": "cli.js"
