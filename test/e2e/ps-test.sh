@@ -44,7 +44,7 @@ node "$ROOT/cli.js" status --app-dir "$APP" --json | grep -q '"patched":true' &&
 grep -q '无需改动' "$W/i2.txt" && ok "重复安装幂等" || { bad "重复安装"; cat "$W/i2.txt"; }
 
 # 3) Antigravity 运行中：拒绝修改，绝不结束进程
-cp "$(command -v sleep)" "$APP/Antigravity-helper"; "$APP/Antigravity-helper" 30 & SP=$!
+cp "$(command -v node)" "$APP/Antigravity-helper"; "$APP/Antigravity-helper" -e "setTimeout(()=>{},30000)" & SP=$!; sleep 1
 before=$(sha "$APP/resources/app.asar")
 "$PWSH" -NoProfile -File "$LOCALAPPDATA/agy-i18n/scripts/uninstall.ps1" -NonInteractive > "$W/u0.txt" 2>&1; c=$?
 [ $c -eq 3 ] && [ "$(sha "$APP/resources/app.asar")" = "$before" ] && kill -0 $SP 2>/dev/null && ok "Antigravity 运行中：拒绝修改且未结束其进程" || { bad "运行中处理 (exit $c)"; cat "$W/u0.txt"; }

@@ -41,7 +41,7 @@ node "$ROOT/cli.js" status --app-dir "$APP" --json | grep -q '"platform":"darwin
 bash "$PKG/scripts/macos/install.sh" --app "$APP" --non-interactive > "$W/i2.txt" 2>&1
 grep -q '无需改动' "$W/i2.txt" && ok "重复安装幂等" || { bad "重复安装"; cat "$W/i2.txt"; }
 
-cp "$(command -v sleep)" "$APP/Contents/MacOS/helper"; "$APP/Contents/MacOS/helper" 30 & SP=$!
+cp "$(command -v node)" "$APP/Contents/MacOS/helper"; "$APP/Contents/MacOS/helper" -e "setTimeout(()=>{},30000)" & SP=$!; sleep 1
 before=$(sha "$APP/Contents/Resources/app.asar")
 bash "$AGY_DATA_DIR/scripts/macos/uninstall.sh" --app "$APP" --non-interactive > "$W/u0.txt" 2>&1; c=$?
 [ $c -eq 3 ] && [ "$(sha "$APP/Contents/Resources/app.asar")" = "$before" ] && kill -0 $SP 2>/dev/null && ok "Antigravity 运行中：拒绝修改且未结束其进程" || { bad "运行中处理 (exit $c)"; cat "$W/u0.txt"; }
